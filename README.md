@@ -1,3 +1,7 @@
+<img style="width:auto; max-height:256px" src="docs/images/banner.png"/>
+    
+
+
 # QuoteMorph
 
 This extension, **QuoteMorph**, automatically converts single or double-quoted strings to backticks in your code when template literals are detected. It is designed to enhance your coding experience by seamlessly switching string encapsulation, especially when working with template literals.

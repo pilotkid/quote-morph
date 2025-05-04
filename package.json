@@ -1,8 +1,10 @@
 {
   "name": "quote-morph",
+  "version": "1.0.1",
   "displayName": "QuoteMorph",
   "description": "Automatically switches quotes to backticks when using ${} in JS/TS strings.",
   "publisher": "pilotkid",
+  "icon": "docs/images/icon.png",
   "license": "MIT",
   "author": {
     "name": "Marcello Bachechi",
@@ -12,7 +14,6 @@
   "sponsor": {
     "url": "https://ko-fi.com/marcellobachechi"
   },
-  "version": "0.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/pilotkid/quote-morph"
