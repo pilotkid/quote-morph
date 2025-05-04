@@ -40,6 +40,13 @@ This extension does not introduce any new settings. It works automatically when 
 
 ## Release Notes
 
+## 1.0.1
+
+- Updated documentation
+- Added icon
+- Added banner
+- Fixed workflows
+
 ### 1.0.0
 
 - Initial release of **QuoteMorph**.
