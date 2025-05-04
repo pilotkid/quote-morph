@@ -1,7 +1,8 @@
 {
   "name": "quote-morph",
   "displayName": "QuoteMorph",
-  "description": "When working with a JS/TS file and you are in a standard string and type a control character to encapulate a value within the string, the string will use ` instead of \" or '",
+  "description": "Automatically switches quotes to backticks when using ${} in JS/TS strings.",
+  "publisher": "pilotkid",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.99.0"
@@ -20,7 +21,9 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "publish:vsce": "vsce publish",
+    "publish:npm": "npm publish"
   },
   "devDependencies": {
     "@types/vscode": "^1.99.0",
