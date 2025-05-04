@@ -47,9 +47,10 @@ This extension does not introduce any new settings. It works automatically when 
 
 This extension adheres to the [Visual Studio Code Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines) to ensure best practices and a high-quality user experience.
 
-## For More Information
+## Please also consider supporting me on ko-fi
+https://ko-fi.com/marcellobachechi
 
-- [Visual Studio Code's Extension API](https://code.visualstudio.com/api)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+<a href='https://ko-fi.com/marcellobachechi' target='_blank'><img height='35' style='border:0px;height:46px;' src='docs/images/kofi.png' border='0' alt='Buy Me a Coffee at ko-fi.com' />
+
 
 **Enjoy coding with QuoteMorph!**
