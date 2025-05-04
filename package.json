@@ -22,6 +22,8 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
+    "build": "tsc -p .",
+    "package": "vsce package",
     "publish:vsce": "vsce publish",
     "publish:npm": "npm publish"
   },
