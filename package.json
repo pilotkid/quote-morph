@@ -4,6 +4,10 @@
   "description": "Automatically switches quotes to backticks when using ${} in JS/TS strings.",
   "publisher": "pilotkid",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pilotkid/quote-morph"
+  },
   "engines": {
     "vscode": "^1.99.0"
   },
