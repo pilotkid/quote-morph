@@ -3,6 +3,15 @@
   "displayName": "QuoteMorph",
   "description": "Automatically switches quotes to backticks when using ${} in JS/TS strings.",
   "publisher": "pilotkid",
+  "license": "MIT",
+  "author": {
+    "name": "Marcello Bachechi",
+    "url": "https://github.com/pilotkid"
+  },
+  "homepage": "https://github.com/pilotkid/quote-morph",
+  "sponsor": {
+    "url": "https://ko-fi.com/marcellobachechi"
+  },
   "version": "0.0.1",
   "repository": {
     "type": "git",
@@ -41,5 +50,17 @@
     "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.5.2"
-  }
+  },
+  "keywords": [
+    "vscode",
+    "extension",
+    "quotes",
+    "backticks",
+    "template literals",
+    "javascript",
+    "typescript",
+    "string conversion",
+    "developer tools",
+    "productivity"
+  ]
 }

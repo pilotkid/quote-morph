@@ -35,11 +35,10 @@ jobs:
           path: "*.vsix"
 
       - name: Upload to GitHub Release
+        if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
         with:
           files: "*.vsix"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to VSCode Marketplace
         run: npx vsce publish --packagePath $(ls *.vsix)
