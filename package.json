@@ -1,6 +1,6 @@
 {
   "name": "quote-morph",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "displayName": "QuoteMorph",
   "description": "Automatically switches quotes to backticks when using ${} in JS/TS strings.",
   "publisher": "pilotkid",
