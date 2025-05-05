@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, your extension "QuoteMorph" is now active!');
+  console.log('✅\t"QuoteMorph" is now active!');
   const lastThreeChanges: string[] = [];
   const disposable = vscode.workspace.onDidChangeTextDocument((event) => {
     const editor = vscode.window.activeTextEditor;
@@ -66,9 +66,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (openingQuoteIndex !== -1 && closingQuoteIndex !== -1 && quoteChar) {
       editor.edit((editBuilder) => {
-        const start = new vscode.Position(position.line, openingQuoteIndex);
-        const end = new vscode.Position(position.line, closingQuoteIndex);
-
         // Replace entire quoted section
         const before = lineText.slice(0, openingQuoteIndex);
         const content = lineText.slice(
@@ -79,6 +76,9 @@ export function activate(context: vscode.ExtensionContext) {
 
         const newLine = `${before}\`${content}\`${after}`;
         editBuilder.replace(line.range, newLine);
+
+        // Clear the last three changes Array to prevent infinite loop
+        lastThreeChanges.length = 0;
       });
     }
   });
