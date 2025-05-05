@@ -3,6 +3,11 @@
 All notable changes to the "QuoteMorph" extension will be documented in this file.
 
 
+## v1.0.2
+
+- Fixed issue with pipeline
+
+
 ## v1.0.1
 
 - Updated documentation

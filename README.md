@@ -40,6 +40,10 @@ This extension does not introduce any new settings. It works automatically when 
 
 ## Release Notes
 
+## 1.0.2
+
+- Fixed issue with pipeline
+
 ## 1.0.1
 
 - Updated documentation

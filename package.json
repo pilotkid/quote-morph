@@ -25,6 +25,7 @@
     "Other"
   ],
   "activationEvents": [
+    "onLanguage:vue",
     "onLanguage:javascript",
     "onLanguage:typescript"
   ],
