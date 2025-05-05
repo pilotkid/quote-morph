@@ -40,6 +40,11 @@ This extension does not introduce any new settings. It works automatically when 
 
 ## Release Notes
 
+## 1.0.3
+
+- Add vue file support
+- Fixed issues with vue / html attributes encapsulating the double quotes when it shouldn't be
+
 ## 1.0.2
 
 - Fixed issue with pipeline

@@ -59,13 +59,23 @@ export function activate(context: vscode.ExtensionContext) {
       ) {
         openingQuoteIndex = before;
         closingQuoteIndex = after;
+
+        // Check if the quotes are not part of an html attribute or tag
+        const between = lineText.slice(before + 1, after);
+        const backTickTotal = between
+          .split('')
+          .filter((c) => c === '`')?.length;
+        if (backTickTotal >= 2) {
+          continue;
+        }
+
         quoteChar = q;
         break;
       }
     }
 
     if (openingQuoteIndex !== -1 && closingQuoteIndex !== -1 && quoteChar) {
-      editor.edit((editBuilder) => {
+      editor.edit((editBuilder) => {        
         // Replace entire quoted section
         const before = lineText.slice(0, openingQuoteIndex);
         const content = lineText.slice(
@@ -76,9 +86,9 @@ export function activate(context: vscode.ExtensionContext) {
 
         const newLine = `${before}\`${content}\`${after}`;
         editBuilder.replace(line.range, newLine);
-
+		
         // Clear the last three changes Array to prevent infinite loop
-        lastThreeChanges.length = 0;
+        lastThreeChanges.length = 0; 
       });
     }
   });

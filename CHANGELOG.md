@@ -3,6 +3,11 @@
 All notable changes to the "QuoteMorph" extension will be documented in this file.
 
 
+## 1.0.3
+
+- Add vue file support
+- Fixed issues with vue / html attributes encapsulating the double quotes when it shouldn't be
+
 ## v1.0.2
 
 - Fixed issue with pipeline
