@@ -2,6 +2,9 @@
 
 All notable changes to the "QuoteMorph" extension will be documented in this file.
 
+## 1.0.4
+
+- Fixed issues with bleed thru where if you typed the right sequence across lines / editors the quote changes would be made in an inappropriate place+
 
 ## 1.0.3
 

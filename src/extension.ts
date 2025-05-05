@@ -2,27 +2,48 @@ import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('✅\t"QuoteMorph" is now active!');
-  const lastThreeChanges: string[] = [];
+  const lastThreeChanges: {
+    character: string;
+    line: number;
+    position: vscode.Position;
+  }[] = [];
+
+  // Clear the last three changes when the active editor changes
+  vscode.window.onDidChangeActiveTextEditor(() => {
+    lastThreeChanges.length = 0;
+  });
+
   const disposable = vscode.workspace.onDidChangeTextDocument((event) => {
     const editor = vscode.window.activeTextEditor;
     if (!editor || event.document !== editor.document) return;
 
     const change = event.contentChanges[0];
     if (change && change.text) {
-      lastThreeChanges.push(change.text);
+      const position = change.range.start;
+      
+      // Clear the last three changes if the line has changed to prevent bleed
+      if (lastThreeChanges.at(0)?.line !== position.line) {
+        lastThreeChanges.length = 0;
+      }
+
+      lastThreeChanges.push({
+        character: change.text,
+        line: position.line,
+        position,
+      });
+
       if (lastThreeChanges.length > 3) {
         lastThreeChanges.shift();
       }
     } else {
       return;
     }
-    const position = change.range.start;
 
-    const changesText = lastThreeChanges.join('');
+    const changesText = lastThreeChanges.map((c) => c.character).join('');
     if (change.text === '$') {
       const nextCharPosition = new vscode.Position(
-        position.line,
-        position.character + 1
+        change.range.start.line,
+        change.range.start.character + 1
       );
       const nextChar = editor.document.getText(
         new vscode.Range(nextCharPosition, nextCharPosition.translate(0, 1))
@@ -31,15 +52,15 @@ export function activate(context: vscode.ExtensionContext) {
       if (nextChar !== '{') {
         return;
       }
-    } else if (!changesText.includes('${') && !changesText.includes('{}')) {
+    } else if (!changesText.includes('${`) && !changesText.includes(`{}')) {
       return;
     }
 
     const doc = editor.document;
-    const line = doc.lineAt(position.line);
+    const line = doc.lineAt(change.range.start.line);
     const lineText = line.text;
 
-    const cursorIndex = position.character;
+    const cursorIndex = change.range.start.character;
     const quoteTypes = [`'`, `"`];
 
     // Find the surrounding quotes
@@ -75,7 +96,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     if (openingQuoteIndex !== -1 && closingQuoteIndex !== -1 && quoteChar) {
-      editor.edit((editBuilder) => {        
+      editor.edit((editBuilder) => {
         // Replace entire quoted section
         const before = lineText.slice(0, openingQuoteIndex);
         const content = lineText.slice(
@@ -86,9 +107,9 @@ export function activate(context: vscode.ExtensionContext) {
 
         const newLine = `${before}\`${content}\`${after}`;
         editBuilder.replace(line.range, newLine);
-		
+
         // Clear the last three changes Array to prevent infinite loop
-        lastThreeChanges.length = 0; 
+        lastThreeChanges.length = 0;
       });
     }
   });
