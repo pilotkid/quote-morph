@@ -40,6 +40,10 @@ This extension does not introduce any new settings. It works automatically when 
 
 ## Release Notes
 
+## 1.0.4
+
+- Fixed issues with bleed thru where if you typed the right sequence across lines / editors the quote changes would be made in an inappropriate place+
+
 ## 1.0.3
 
 - Add vue file support
