@@ -2,6 +2,9 @@
 
 All notable changes to the "QuoteMorph" extension will be documented in this file.
 
+## 1.1.1
+- Fixed CI/CD
+
 ## 1.1.0
 - Fixed 
   - issues with quotes not morphing
