@@ -81,7 +81,7 @@
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\"",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "build": "tsc -p . -- --rootDir src",
+    "build": "tsc -p . --rootDir src",
     "package": "npx @vscode/vsce package",
     "publish:vsce": "npx @vscode/vsce publish",
     "publish:npm": "npm publish"
