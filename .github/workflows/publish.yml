@@ -7,7 +7,8 @@ on:
 
 permissions:
   contents: write
-
+  id-token: write  # Required for OIDC
+  
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
