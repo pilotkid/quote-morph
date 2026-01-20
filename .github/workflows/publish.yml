@@ -1,11 +1,8 @@
 name: Build and Publish VSIX & NPM
 
 on:
-  push:
-    branches:
-      - "release/**"
-    tags:
-      - "v*"
+  release:
+    types: [published]
 
 permissions:
   contents: write
