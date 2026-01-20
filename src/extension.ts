@@ -1,7 +1,31 @@
 import * as vscode from 'vscode';
+import { morphQuotesInLine } from './morph';
+
+
+function getSettings() {
+  const cfg = vscode.workspace.getConfiguration('quoteMorph');
+  return {
+    enabled: cfg.get<boolean>("enabled", true),
+    enableForAllLanguages: cfg.get<boolean>("enableForAllLanguages", false),
+    languageIds: new Set(cfg.get<string[]>("languageIds", [])),
+    enableQuotesSingle: cfg.get<boolean>("enableQuotesSingle", true),
+    enableQuotesDouble: cfg.get<boolean>("enableQuotesDouble", true),
+  };
+}
+
+function shouldHandleDoc(doc: vscode.TextDocument, settings: ReturnType<typeof getSettings>) {
+  if (!settings.enabled) {return false;}
+  if (doc.uri.scheme !== "file") {return false;} // optional: ignore untitled/git/etc
+  if (settings.enableForAllLanguages) {return true;}
+  return settings.languageIds.has(doc.languageId);
+}
+
+
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('✅\t"QuoteMorph" is now active!');
+  let settings = getSettings();
+  
   const lastThreeChanges: {
     character: string;
     line: number;
@@ -13,108 +37,57 @@ export function activate(context: vscode.ExtensionContext) {
     lastThreeChanges.length = 0;
   });
 
-  const disposable = vscode.workspace.onDidChangeTextDocument((event) => {
-    const editor = vscode.window.activeTextEditor;
-    if (!editor || event.document !== editor.document) return;
+  const maybeSetup = (doc: vscode.TextDocument) => {
+    if (!shouldHandleDoc(doc, settings)) {return;}
 
-    const change = event.contentChanges[0];
-    if (change && change.text) {
-      const position = change.range.start;
-      
-      // Clear the last three changes if the line has changed to prevent bleed
-      if (lastThreeChanges.at(0)?.line !== position.line) {
-        lastThreeChanges.length = 0;
-      }
+    // Setup document change listener for quote morphing
+    const disposable = vscode.workspace.onDidChangeTextDocument((event) => {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor || event.document !== editor.document || event.document !== doc) {return;}
 
-      lastThreeChanges.push({
-        character: change.text,
-        line: position.line,
-        position,
-      });
+      const change = event.contentChanges[0];
+      if (!change || !change.text) {return;}
 
-      if (lastThreeChanges.length > 3) {
-        lastThreeChanges.shift();
-      }
-    } else {
-      return;
-    }
+      const lineNumber = change.range.start.line;
+      const line = doc.lineAt(lineNumber);
+      const lineText = line.text;
 
-    const changesText = lastThreeChanges.map((c) => c.character).join('');
-    if (change.text === '$') {
-      const nextCharPosition = new vscode.Position(
-        change.range.start.line,
-        change.range.start.character + 1
-      );
-      const nextChar = editor.document.getText(
-        new vscode.Range(nextCharPosition, nextCharPosition.translate(0, 1))
-      );
-
-      if (nextChar !== '{') {
+      // Look for any strings containing template literals that need conversion
+      const templateLiteralPattern = /\$\{[^}]*\}/;
+      if (!templateLiteralPattern.test(lineText)) {
         return;
       }
-    } else if (!changesText.includes('${`) && !changesText.includes(`{}')) {
-      return;
-    }
 
-    const doc = editor.document;
-    const line = doc.lineAt(change.range.start.line);
-    const lineText = line.text;
+      const newLine = morphQuotesInLine(lineText, settings);
+      if (!newLine) {return;}
 
-    const cursorIndex = change.range.start.character;
-    const quoteTypes = [`'`, `"`];
-
-    // Find the surrounding quotes
-    let openingQuoteIndex = -1;
-    let closingQuoteIndex = -1;
-    let quoteChar = '';
-
-    for (const q of quoteTypes) {
-      const before = lineText.lastIndexOf(q, cursorIndex - 1);
-      const after = lineText.indexOf(q, cursorIndex);
-
-      if (
-        before !== -1 &&
-        after !== -1 &&
-        before < cursorIndex &&
-        after > cursorIndex
-      ) {
-        openingQuoteIndex = before;
-        closingQuoteIndex = after;
-
-        // Check if the quotes are not part of an html attribute or tag
-        const between = lineText.slice(before + 1, after);
-        const backTickTotal = between
-          .split('')
-          .filter((c) => c === '`')?.length;
-        if (backTickTotal >= 2) {
-          continue;
-        }
-
-        quoteChar = q;
-        break;
-      }
-    }
-
-    if (openingQuoteIndex !== -1 && closingQuoteIndex !== -1 && quoteChar) {
       editor.edit((editBuilder) => {
-        // Replace entire quoted section
-        const before = lineText.slice(0, openingQuoteIndex);
-        const content = lineText.slice(
-          openingQuoteIndex + 1,
-          closingQuoteIndex
-        );
-        const after = lineText.slice(closingQuoteIndex + 1);
-
-        const newLine = `${before}\`${content}\`${after}`;
         editBuilder.replace(line.range, newLine);
-
-        // Clear the last three changes Array to prevent infinite loop
         lastThreeChanges.length = 0;
       });
-    }
-  });
+    });
 
-  context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable);
+  };
+
+  // Handle already-open docs (important)
+  vscode.workspace.textDocuments.forEach(maybeSetup);
+
+  // Handle new docs
+  context.subscriptions.push(
+    vscode.workspace.onDidOpenTextDocument(maybeSetup)
+  );
+
+  // React to settings changes live
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (!e.affectsConfiguration('quoteMorph')) {return;}
+      settings = getSettings();
+
+      // Optionally re-run setup on currently open docs when settings change
+      vscode.workspace.textDocuments.forEach(maybeSetup);
+    })
+  );
 }
 
 export function deactivate() {}

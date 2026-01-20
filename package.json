@@ -22,21 +22,64 @@
     "vscode": "^1.99.0"
   },
   "categories": [
+    "Formatters",
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:vue",
-    "onLanguage:javascript",
-    "onLanguage:typescript"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "title": "QuoteMorph",
+      "properties": {
+        "quoteMorph.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable the QuoteMorph."
+        },
+        "quoteMorph.languageIds": {
+          "type": "array",
+          "default": [
+            "javascript",
+            "typescript",
+            "javascriptreact",
+            "typescriptreact",
+            "vue",
+            "svelte",
+            "astro"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Language IDs where the extension should run (e.g. javascript, typescriptreact, vue)."
+        },
+        "quoteMorph.enableForAllLanguages": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, the extension runs for any language, ignoring languageIds."
+        },
+        "quoteMorph.enableQuotesSingle": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable conversion from single quotes to backticks when using ${}. (' to `)"
+        },
+        "quoteMorph.enableQuotesDouble": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable conversion from double quotes to backticks when using ${}. (\" to `)"
+        }
+      }
+    }
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
+    "test": "mocha -r ts-node/register \"test/**/*.test.ts\"",
     "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "build": "tsc -p .",
     "package": "vsce package",
     "publish:vsce": "vsce publish",
@@ -45,13 +88,17 @@
   "devDependencies": {
     "@types/vscode": "^1.99.0",
     "@types/mocha": "^10.0.10",
+    "@types/chai": "^4.3.0",
     "@types/node": "20.x",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
     "eslint": "^9.25.1",
     "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7",
+    "ts-node": "^10.9.1"
   },
   "keywords": [
     "vscode",

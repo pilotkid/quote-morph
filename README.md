@@ -31,7 +31,23 @@ This extension does not have any special requirements or dependencies. It works 
 
 ## Extension Settings
 
-This extension does not introduce any new settings. It works automatically when installed and activated.
+
+All settings are under the `quoteMorph` namespace.
+
+- `quoteMorph.enabled` (boolean, default: `true`)  
+    Enable or disable the extension.
+
+- `quoteMorph.languageIds` (string[], default: `["javascript","typescript","javascriptreact","typescriptreact","vue","svelte","astro"]`)  
+    List of language IDs where the extension should run when `quoteMorph.enableForAllLanguages` is `false`.
+
+- `quoteMorph.enableForAllLanguages` (boolean, default: `false`)  
+    If `true`, the extension runs for any language and ignores `quoteMorph.languageIds`.
+
+- `quoteMorph.enableQuotesSingle` (boolean, default: `true`)  
+    When `true`, converts single-quoted strings (`'...'`) to backticks (`` `...` ``) if `${}` interpolation is used.
+
+- `quoteMorph.enableQuotesDouble` (boolean, default: `true`)  
+    When `true`, converts double-quoted strings (`"..."`) to backticks (`` `...` ``) if `${}` interpolation is used.
 
 ## Known Issues
 
@@ -40,20 +56,31 @@ This extension does not introduce any new settings. It works automatically when 
 
 ## Release Notes
 
-## 1.0.4
+### 1.1.0
+- Fixed 
+  - issues with quotes not morphing
+  - issues with vue template bindings trigging morph
+- Added configuration (settings) 
+  - to enable / disable 
+  - active file types
+  - disable triggering on certain quotes (e.g. only enable for single quotes)
+- Developer Experience 
+  - Added unit tests
+
+### 1.0.4
 
 - Fixed issues with bleed thru where if you typed the right sequence across lines / editors the quote changes would be made in an inappropriate place+
 
-## 1.0.3
+### 1.0.3
 
 - Add vue file support
 - Fixed issues with vue / html attributes encapsulating the double quotes when it shouldn't be
 
-## 1.0.2
+### 1.0.2
 
 - Fixed issue with pipeline
 
-## 1.0.1
+### 1.0.1
 
 - Updated documentation
 - Added icon

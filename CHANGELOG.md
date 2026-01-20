@@ -2,9 +2,20 @@
 
 All notable changes to the "QuoteMorph" extension will be documented in this file.
 
+## 1.1.0
+- Fixed 
+  - issues with quotes not morphing
+  - issues with vue template bindings trigging morph
+- Added configuration (settings) 
+  - to enable / disable 
+  - active file types
+  - disable triggering on certain quotes (e.g. only enable for single quotes)
+- Developer Experience 
+  - Added unit tests
+
 ## 1.0.4
 
-- Fixed issues with bleed thru where if you typed the right sequence across lines / editors the quote changes would be made in an inappropriate place+
+- Fixed issues with bleed thru where if you typed the right sequence across lines / editors the quote changes would be made in an inappropriate place
 
 ## 1.0.3
 
