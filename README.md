@@ -56,6 +56,9 @@ All settings are under the `quoteMorph` namespace.
 
 ## Release Notes
 
+### 1.1.2
+- Fixed CI/CD for NPM
+
 ### 1.1.1
 - Fixed CI/CD
 
