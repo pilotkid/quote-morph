@@ -3,6 +3,8 @@ export interface MorphSettings {
   enableQuotesDouble: boolean;
 }
 
+
+
 export function morphQuotesInLine(lineText: string, settings: MorphSettings): string | null {
   const quoteTypes: string[] = [];
   if (settings.enableQuotesSingle) {quoteTypes.push("'");}
@@ -10,32 +12,33 @@ export function morphQuotesInLine(lineText: string, settings: MorphSettings): st
 
   if (quoteTypes.length === 0) {return null;}
 
+  let newLine = lineText;
+  let changed = false;
+
   for (const quoteChar of quoteTypes) {
-    const regex = new RegExp(quoteChar + '([^' + quoteChar + ']*\\$\\{[^}]*\\}[^' + quoteChar + ']*)' + quoteChar, 'g');
-    let match;
+    // match a quoted string allowing escaped chars inside, but require a ${...} inside
+    const pattern = quoteChar + '((?:\\\\.|[^' + quoteChar + '])*?\\$\\{[^}]*\\}(?:\\\\.|[^' + quoteChar + '])*)' + quoteChar;
+    const regex = new RegExp(pattern, 'g');
 
-    while ((match = regex.exec(lineText)) !== null) {
-      const fullMatch = match[0];
-      const content = match[1];
-      const startIndex = match.index;
-      const endIndex = startIndex + fullMatch.length;
+    newLine = newLine.replace(regex, (fullMatch: string, content: string) => {
+      // leave alone if content contains escaped outer-quote (e.g. It\'s ...)
+      if (content.includes('\\' + quoteChar)) {
+        return fullMatch;
+      }
 
+      // leave alone if inner content itself is quoted/backticked (e.g. :src="`${test}`")
       if (content.length >= 2) {
         const first = content[0];
         const last = content[content.length - 1];
         if (["\"", "'", "`"].includes(first) && first === last) {
-          continue;
+          return fullMatch;
         }
       }
 
-      if (content.includes('${') && !fullMatch.startsWith('`')) {
-        const before = lineText.slice(0, startIndex);
-        const after = lineText.slice(endIndex);
-        const newLine = `${before}\`${content}\`${after}`;
-        return newLine;
-      }
-    }
+      changed = true;
+      return '`' + content + '`';
+    });
   }
 
-  return null;
+  return changed ? newLine : null;
 }

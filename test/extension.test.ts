@@ -33,4 +33,22 @@ describe('morphQuotesInLine', () => {
     const got = morphQuotesInLine(line, settings as any);
     expect(got).to.equal(null);
   });
+
+  it('leaves strings with escaped quotes alone', () => {
+    const line = "const s = 'It\\'s ${name}';";
+    const got = morphQuotesInLine(line, settings as any);
+    expect(got).to.equal(null);
+  });
+
+  it('converts multiple quoted template strings on the same line', () => {
+    const line = 'const a = "Hi ${x}", b = \'Bye ${y}\';';
+    const got = morphQuotesInLine(line, settings as any);
+    expect(got).to.equal('const a = `Hi ${x}`, b = `Bye ${y}`;');
+  });
+
+  it('does not change lines without template placeholders', () => {
+    const line = 'const s = "Hello world";';
+    const got = morphQuotesInLine(line, settings as any);
+    expect(got).to.equal(null);
+  });
 });

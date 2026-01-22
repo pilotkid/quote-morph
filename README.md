@@ -56,8 +56,11 @@ All settings are under the `quoteMorph` namespace.
 
 ## Release Notes
 
-### 1.1.2
-- Fixed CI/CD for NPM
+### 1.1.7
+- Ignore escaped quotes
+
+### 1.1.2 - 1.1.6
+- Attempts to fix CI/CD for NPM
 
 ### 1.1.1
 - Fixed CI/CD
