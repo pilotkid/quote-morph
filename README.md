@@ -56,6 +56,9 @@ All settings are under the `quoteMorph` namespace.
 
 ## Release Notes
 
+### 1.1.8
+- Fix issue where quotes within encapsulated strings get morphed
+
 ### 1.1.7
 - Ignore escaped quotes
 
